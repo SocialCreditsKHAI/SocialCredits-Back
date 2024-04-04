@@ -1,0 +1,54 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.9.34622.214
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SocialCredits", "SocialCredits.csproj", "{F0D2F3FA-EC41-4E91-850E-A0E5E5D9E777}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SocialCredits.Services", "SocialCredits.Services", "{978439F3-640B-4DBF-B1D1-A7536F6C9C40}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SocialCredits.Repositories", "SocialCredits.Repositories", "{1573F59E-6CA2-40B6-BC90-548973FFE6E0}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SocialCredits.Services", "..\SocialCredits.Services\SocialCredits.Services.csproj", "{F2B55D91-C177-4C3B-AF5A-C2C8CEB99AE4}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SocialCredits.Repositories", "..\SocialCredits.Repositories\SocialCredits.Repositories.csproj", "{DA15A3BA-FE03-4663-A09F-DDFB2990D0F6}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SocialCredits.Domain", "SocialCredits.Domain", "{6E222351-3A5A-4163-BC50-9917B1985DBD}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SocialCredits.Domain", "..\SocialCredits.Domain\SocialCredits.Domain.csproj", "{C169A110-DF2B-4245-8353-F9B23FA36EA4}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{F0D2F3FA-EC41-4E91-850E-A0E5E5D9E777}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F0D2F3FA-EC41-4E91-850E-A0E5E5D9E777}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F0D2F3FA-EC41-4E91-850E-A0E5E5D9E777}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F0D2F3FA-EC41-4E91-850E-A0E5E5D9E777}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F2B55D91-C177-4C3B-AF5A-C2C8CEB99AE4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F2B55D91-C177-4C3B-AF5A-C2C8CEB99AE4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F2B55D91-C177-4C3B-AF5A-C2C8CEB99AE4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F2B55D91-C177-4C3B-AF5A-C2C8CEB99AE4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DA15A3BA-FE03-4663-A09F-DDFB2990D0F6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DA15A3BA-FE03-4663-A09F-DDFB2990D0F6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DA15A3BA-FE03-4663-A09F-DDFB2990D0F6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DA15A3BA-FE03-4663-A09F-DDFB2990D0F6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C169A110-DF2B-4245-8353-F9B23FA36EA4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C169A110-DF2B-4245-8353-F9B23FA36EA4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C169A110-DF2B-4245-8353-F9B23FA36EA4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C169A110-DF2B-4245-8353-F9B23FA36EA4}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{F2B55D91-C177-4C3B-AF5A-C2C8CEB99AE4} = {978439F3-640B-4DBF-B1D1-A7536F6C9C40}
+		{DA15A3BA-FE03-4663-A09F-DDFB2990D0F6} = {1573F59E-6CA2-40B6-BC90-548973FFE6E0}
+		{C169A110-DF2B-4245-8353-F9B23FA36EA4} = {6E222351-3A5A-4163-BC50-9917B1985DBD}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {3206EEA0-9968-455D-9124-F42C8FC47A53}
+	EndGlobalSection
+EndGlobal
