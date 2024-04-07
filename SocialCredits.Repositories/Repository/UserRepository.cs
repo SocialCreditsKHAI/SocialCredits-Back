@@ -8,7 +8,7 @@ namespace SocialCredits.Repositories.Repository
     public class UserRepository : BaseRepository<User>, IUserRepository
     {
 
-        public UserRepository(IMongoDbSettings settings) : base(settings, "Users") { }
+        public UserRepository(IMongoDbSettings settings) : base(settings, "User") { }
 
         public async Task<bool> CreateUser(User user)
         {

@@ -4,7 +4,10 @@ using System.Net.Http.Headers;
 using SocialCredits.Domain;
 using SocialCredits.Domain.Models;
 using System.Text;
-using SocialCredits_Back.Mapper;
+using SocialCredits.Services.Interfaces;
+using SocialCredits.Services;
+using SocialCredits.Repositories.Interfaces;
+using SocialCredits.Repositories.Repository;
 
 namespace SocialCredits_Back
 {
@@ -23,6 +26,12 @@ namespace SocialCredits_Back
                     DatabaseName = conf.GetValue<string>("DatabaseName")!
                 };
             });
+            
+            
+            builder.Services.AddScoped<IUserServices, UserService>();
+            builder.Services.AddScoped<IUserRepository,UserRepository>();
+            
+
             builder.Services.AddAutoMapper(typeof(MappingProfile));
             builder.Services.AddAuthorization(options =>
             {

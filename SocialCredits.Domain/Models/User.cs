@@ -1,15 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using MongoDB.Bson;
 
 namespace SocialCredits.Domain.Models
 {
     public class User
     {
-        public int _id { get; set; }
+        public ObjectId _id { get; set; }
         public string Login { get; set; }
         public string Name { get; set; }
         public string Password { get; set; }
@@ -17,29 +12,31 @@ namespace SocialCredits.Domain.Models
         public decimal Credits { get; set; }
         public List<Socials> Social { get; set; }
         public string Role { get; set; }
-        private Random rand = new Random();
+        public DateTime CreatedAt { get; set; }
 
         private User()
         {
-            _id = rand.Next(99999999);
+            CreatedAt = DateTime.Now;
             Role = "Unreg";
             Credits = 0;
         }
 
-        public User(string login, string name, string password) : this()
+        public User(string login, string name, string password, string imagePath) : this()
         {
             Login = login;
             Name = name;
             Password = password;
             Social = new List<Socials> { }; 
+            ImagePath = imagePath;
         }
 
-        public User(string login, string name, string password, List<Socials> social) : this()
+        public User(string login, string name, string password, string imagePath, List<Socials> social) : this()
         {
             Login = login;
             Name = name;
             Password = password;
             Social = social;
+            ImagePath = imagePath;
         }
     }
 }

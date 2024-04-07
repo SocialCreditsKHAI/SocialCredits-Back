@@ -12,7 +12,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Interfaces\" />
+    <ProjectReference Include="..\SocialCredits.Domain\SocialCredits.Domain.csproj" />
   </ItemGroup>
 
 </Project>
