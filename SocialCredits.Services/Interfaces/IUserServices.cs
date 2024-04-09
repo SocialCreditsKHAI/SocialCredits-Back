@@ -7,11 +7,12 @@ namespace SocialCredits.Services.Interfaces
 {
     public interface IUserServices
     {
-        public User GetUserByLogin(int id);
+        public Task<User> GetUserByLogin(string login);
         public User GetUserByName(string name);
-        public Task<(HttpStatusCode, string)> Login(UserLoginDTO user);
+        public Task<(HttpStatusCode StatusCode, string Message)> Login(UserLoginDTO user);
         public Task<bool> Registration(UserRegistrationWithImageNameViewModel model);
         public Task<bool> Registration(UserRegistrationWithImageViewModel model);
+        public Task<List<UserToShowViewModel>> GetAllUsersList();
 
 
     }

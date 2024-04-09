@@ -29,6 +29,14 @@ namespace SocialCredits.Repositories.Repository
             return user;
         }
 
+        public async Task<List<User>> GetAllUsersList()
+        {
+            var filter = Builders<User>.Filter.Eq("Role", "User");
+            var sort = Builders<User>.Sort.Descending("Credits");
+            var result = await _collection.Find(filter).Sort(sort).ToListAsync();
+            return result;
+        }
+
         public async Task<List<User>> SearchUserByName(string name)
         { 
             var filter = Builders<User>.Filter.Regex("Name", new MongoDB.Bson.BsonRegularExpression(name, "i"));

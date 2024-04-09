@@ -1,4 +1,6 @@
 ﻿using AutoMapper;
+using SocialCredits.Domain.Models;
+using SocialCredits.Domain.ViewModels;
 
 
 namespace SocialCredits_Back
@@ -7,7 +9,7 @@ namespace SocialCredits_Back
     {
         public MappingProfile()
         {
-            //CreateMap<User, UserSearchByName>();
+            CreateMap<User, UserToShowViewModel>();
         }
     }
 }

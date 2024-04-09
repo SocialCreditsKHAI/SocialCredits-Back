@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using SocialCredits.Domain.DTO;
@@ -17,16 +18,19 @@ namespace SocialCredits.Services
     {
         private readonly IUserRepository _repository;
         private readonly JWTSettings _options;
+        private readonly IMapper _mapper;
 
-        public UserService(IOptions<JWTSettings> options, IUserRepository userRepository)
+
+        public UserService(IOptions<JWTSettings> options, IUserRepository userRepository, IMapper mapper)
         {
             _options = options.Value;
             _repository = userRepository;
+            _mapper = mapper;
         }
 
-        public User GetUserByLogin(int id)
+        public async Task<User> GetUserByLogin(string login)
         {
-            throw new NotImplementedException();
+            return await _repository.GetUserByLogin(login);
         }
 
         public User GetUserByName(string name)
@@ -34,7 +38,18 @@ namespace SocialCredits.Services
             throw new NotImplementedException();
         }
 
-        public async Task<(HttpStatusCode, string)> Login(UserLoginDTO user)
+        public async Task<List<UserToShowViewModel>> GetAllUsersList()
+        {
+            var users = await _repository.GetAllUsersList();
+            var mappingUsers = new List<UserToShowViewModel>();
+            foreach (var user in users)
+            {
+                mappingUsers.Add(_mapper.Map<UserToShowViewModel>(user));
+            }
+            return mappingUsers;
+        }
+
+        public async Task<(HttpStatusCode StatusCode, string Message)> Login(UserLoginDTO user)
         {
             var baseUser = await _repository.GetUserByLogin(user.Login);
             if (baseUser == null)
@@ -43,7 +58,7 @@ namespace SocialCredits.Services
             }
             else if (baseUser.Password != user.Password)
             {
-                return (HttpStatusCode.BadRequest, "Невірне ім'я або пароль");
+                return (HttpStatusCode.BadRequest, "Невірний пароль");
             }
             else if (baseUser.Role == "Unreg")
             {
@@ -58,7 +73,12 @@ namespace SocialCredits.Services
 
         public async Task<bool> Registration(UserRegistrationWithImageNameViewModel model)
         {
-            var newUser = new User(model.Login, model.Name, model.Password, model.imageName,model.socials);
+            var user = await _repository.GetUserByLogin(model.Login);
+            if (user != null)
+            {
+                return false;
+            }
+            var newUser = new User(model.Login, model.Name, model.Password, model.imageName, model.socials);
             var result = await _repository.CreateUser(newUser);
             return result;
 
@@ -66,6 +86,11 @@ namespace SocialCredits.Services
 
         public async Task<bool> Registration(UserRegistrationWithImageViewModel model)
         {
+            var user = await _repository.GetUserByLogin(model.Login);
+            if (user != null)
+            {
+                return false;
+            }
             var imagePath = SaveImage(model.Image);
             var newUser = new User(model.Login, model.Name, model.Password, imagePath, model.socials);
             var result = await _repository.CreateUser(newUser);
@@ -113,6 +138,6 @@ namespace SocialCredits.Services
             {
                 return ex.Message;
             }
-    }
+        }
     }
 }

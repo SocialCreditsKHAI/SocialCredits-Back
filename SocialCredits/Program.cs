@@ -8,6 +8,7 @@ using SocialCredits.Services.Interfaces;
 using SocialCredits.Services;
 using SocialCredits.Repositories.Interfaces;
 using SocialCredits.Repositories.Repository;
+using SocialCredits.Services.Services;
 
 namespace SocialCredits_Back
 {
@@ -30,6 +31,8 @@ namespace SocialCredits_Back
             
             builder.Services.AddScoped<IUserServices, UserService>();
             builder.Services.AddScoped<IUserRepository,UserRepository>();
+            builder.Services.AddScoped<IUserAcceptVoteRepository, UserAcceptVoteRepository>();
+            builder.Services.AddScoped<IUserAcceptVoteService, UserAcceptVoteService>();
             
 
             builder.Services.AddAutoMapper(typeof(MappingProfile));

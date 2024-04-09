@@ -1,5 +1,7 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using SocialCredits.Domain.DTO;
+using SocialCredits.Domain.Models;
 using SocialCredits.Domain.ViewModels;
 using SocialCredits.Services.Interfaces;
 
@@ -11,46 +13,85 @@ namespace SocialCredits.Controllers
     public class UserController : ControllerBase
     {
         private readonly IUserServices _service;
+        private readonly IUserAcceptVoteService _userAcceptVoteService;
 
-        public UserController(IUserServices service)
+        public UserController(IUserServices service, IUserAcceptVoteService userAcceptVoteService)
         {
             _service = service;
+            _userAcceptVoteService = userAcceptVoteService;
         }
-
 
         [HttpPost]
         [Route("Login")]
-
         public async Task<IActionResult> Login(UserLoginDTO userLoginDTO)
         {
             var response = await _service.Login(userLoginDTO);
 
-            switch (response.Item1)
+            switch (response.StatusCode)
             {
                 case System.Net.HttpStatusCode.OK:
-                    return Ok(response.Item2);
+                    return Ok(response.Message);
                 case System.Net.HttpStatusCode.BadRequest:
-                    return BadRequest(response.Item2);
+                    return BadRequest(response.Message);
                 case System.Net.HttpStatusCode.Unauthorized:
-                    return Unauthorized(response.Item2);
+                    return Unauthorized(response.Message);
                 case System.Net.HttpStatusCode.NotFound:
-                    return NotFound(response.Item2);
+                    return NotFound(response.Message);
             }
-            return Ok();
+            return BadRequest();
 
         }
+
         [HttpPost]
         [Route("RegistrationImage")]
         public async Task<IActionResult> RegistrationImage(UserRegistrationWithImageViewModel credentials)
         {
-            return Ok(await _service.Registration(credentials));
+            try
+            {
+                if (await _service.Registration(credentials))
+                {
+                    await _userAcceptVoteService.CreateUserAcceptVote(new UserAcceptVote(credentials.Login));
+                    return Ok(true);
+                }
+                else
+                {
+                    return Ok(false);
+                }
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex);
+            }
+
         }
         [HttpPost]
         [Route("RegistrationImageName")]
         public async Task<IActionResult> RegistrationImageName(UserRegistrationWithImageNameViewModel credentials)
         {
+            try
+            {
+                if(await _service.Registration(credentials))
+                {
+                await _userAcceptVoteService.CreateUserAcceptVote(new UserAcceptVote(credentials.Login));
+                return Ok(true);
+                }
+                else
+                {
+                    return Ok(false);
+                }
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex);
+            }
+        }
 
-            return Ok(await _service.Registration(credentials));
+        [HttpGet]
+        [Route("GetUsersList")]
+        
+        public async Task<IActionResult> GetUsersList()
+        {
+            return Ok(await _service.GetAllUsersList());
         }
     }
 }
