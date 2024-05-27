@@ -2,7 +2,14 @@
 {
     public class Voter
     {
-        public int VoterLogin { get; set; }
-        public bool isAccept { get; set;}
+
+        public string VoterLogin { get; set; }
+        public bool isAccept { get; set; }
+        public DateTime DateTime { get; set; }
+
+        public Voter()
+        {
+            DateTime = DateTime.Now;
+        }
     }
 }

@@ -13,7 +13,8 @@ namespace SocialCredits.Services.Interfaces
         public Task<bool> Registration(UserRegistrationWithImageNameViewModel model);
         public Task<bool> Registration(UserRegistrationWithImageViewModel model);
         public Task<List<UserToShowViewModel>> GetAllUsersList();
-
-
+        public Task<long> GetUsersCount();
+        public Task ChangeRoleToUser(string login);
+        Task<UserToShowViewModel> GetUserToShow(string login);
     }
 }

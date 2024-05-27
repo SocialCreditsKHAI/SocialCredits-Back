@@ -44,54 +44,72 @@ namespace SocialCredits.Controllers
 
         [HttpPost]
         [Route("RegistrationImage")]
-        public async Task<IActionResult> RegistrationImage(UserRegistrationWithImageViewModel credentials)
+        public async Task<IActionResult> RegistrationImage([FromForm] UserRegistrationWithImageViewModel credentials)
         {
-            try
+            if (ModelState.IsValid)
             {
-                if (await _service.Registration(credentials))
+                try
                 {
-                    await _userAcceptVoteService.CreateUserAcceptVote(new UserAcceptVote(credentials.Login));
-                    return Ok(true);
+                    if (await _service.Registration(credentials))
+                    {
+                        await _userAcceptVoteService.CreateUserAcceptVote(new UserAcceptVote(credentials.Login));
+                        return Ok(true);
+                    }
+                    else
+                    {
+                        return Ok(false);
+                    }
                 }
-                else
+                catch (Exception ex)
                 {
-                    return Ok(false);
+                    return BadRequest(ex);
                 }
             }
-            catch (Exception ex)
-            {
-                return BadRequest(ex);
-            }
-
+            else { return Ok(ModelState); }
         }
         [HttpPost]
         [Route("RegistrationImageName")]
-        public async Task<IActionResult> RegistrationImageName(UserRegistrationWithImageNameViewModel credentials)
+        public IActionResult RegistrationImageName(UserRegistrationWithImageNameViewModel credentials)
         {
-            try
+            if (ModelState.IsValid)
             {
-                if(await _service.Registration(credentials))
+                try
                 {
-                await _userAcceptVoteService.CreateUserAcceptVote(new UserAcceptVote(credentials.Login));
-                return Ok(true);
+                    if (_service.Registration(credentials).Result)
+                    {
+                        _userAcceptVoteService.CreateUserAcceptVote(new UserAcceptVote(credentials.Login));
+                        return Ok(true);
+                    }
+                    else
+                    {
+                        return Ok(false);
+                    }
                 }
-                else
+                catch (Exception ex)
                 {
-                    return Ok(false);
+                    return BadRequest(ex);
                 }
             }
-            catch (Exception ex)
-            {
-                return BadRequest(ex);
-            }
+            else { return Ok(ModelState); }
+
         }
 
         [HttpGet]
         [Route("GetUsersList")]
-        
         public async Task<IActionResult> GetUsersList()
         {
             return Ok(await _service.GetAllUsersList());
+        }
+
+        [HttpGet]
+        [Route("GetUserByToken")]
+        [Authorize] 
+        
+        public async Task<IActionResult> GetUserByToken()
+        {
+            var userLogin = User.Claims.FirstOrDefault().Value;
+            var user = await _service.GetUserToShow(userLogin);
+            return Ok(user);
         }
     }
 }

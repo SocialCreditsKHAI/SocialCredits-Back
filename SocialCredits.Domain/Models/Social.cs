@@ -4,7 +4,7 @@
     {
         public string SocialName{ get; set; }
         public string SocialLink { get; set;}
-        
+        public Socials() { }
         public Socials(string socialName, string socialLink)
         {
             SocialName = socialName;

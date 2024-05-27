@@ -1,4 +1,5 @@
-﻿using AutoMapper;
+﻿using Amazon.SecurityToken.Model;
+using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
@@ -11,6 +12,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Net;
 using System.Security.Claims;
 using System.Text;
+using ZstdSharp.Unsafe;
 
 namespace SocialCredits.Services
 {
@@ -31,6 +33,12 @@ namespace SocialCredits.Services
         public async Task<User> GetUserByLogin(string login)
         {
             return await _repository.GetUserByLogin(login);
+        }
+
+        public async Task<UserToShowViewModel> GetUserToShow(string login)
+        {
+            var user = await _repository.GetUserByLogin(login);
+            return _mapper.Map<UserToShowViewModel>(user); 
         }
 
         public User GetUserByName(string name)
@@ -78,7 +86,7 @@ namespace SocialCredits.Services
             {
                 return false;
             }
-            var newUser = new User(model.Login, model.Name, model.Password, model.imageName, model.socials);
+            var newUser = new User(model.Login, model.Name, model.Password, model.imageName, model.Socials);
             var result = await _repository.CreateUser(newUser);
             return result;
 
@@ -92,11 +100,22 @@ namespace SocialCredits.Services
                 return false;
             }
             var imagePath = SaveImage(model.Image);
-            var newUser = new User(model.Login, model.Name, model.Password, imagePath, model.socials);
+            var newUser = new User(model.Login, model.Name, model.Password, imagePath, model.Socials);
             var result = await _repository.CreateUser(newUser);
             return result;
 
         }
+        
+        public async Task<long> GetUsersCount()
+        {
+            return await _repository.GetUsersCount();
+        }
+        
+        public async Task ChangeRoleToUser(string login)
+        {
+            await _repository.UpdateUserRole(login, "User");
+        }
+
 
         private string GetToken(User user)
         {
@@ -139,5 +158,7 @@ namespace SocialCredits.Services
                 return ex.Message;
             }
         }
+
+       
     }
 }

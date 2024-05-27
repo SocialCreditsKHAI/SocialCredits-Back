@@ -1,11 +1,9 @@
-﻿using SocialCredits.Domain.Models;
+﻿using MongoDB.Driver.Core.Authentication;
+using SocialCredits.Domain.Models;
 using SocialCredits.Repositories.Interfaces;
 using SocialCredits.Services.Interfaces;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using SocialCredits.Domain.Enums;
+
 
 namespace SocialCredits.Services.Services
 {
@@ -18,9 +16,31 @@ namespace SocialCredits.Services.Services
             _repository = repository;
         }
 
-        public Task<bool> AddVoter(UserAcceptVote userAcceptVote)
+
+        public async Task<VoteStatus> AddVoter(Voter userAcceptVote, string voteFor, int usersPercent)
         {
-            throw new NotImplementedException();
+            var vote = await _repository.GetOneFromLogin(voteFor);
+            if (vote == null)
+            {
+                return VoteStatus.NotFound;
+            }
+            if (vote.Voters.Find(v => v.VoterLogin == userAcceptVote.VoterLogin) != null)
+            {
+                return VoteStatus.AlreadyVoted;
+            }
+            vote.Voters.Add(userAcceptVote);
+            if (vote.GetVotersStatistic().Accept >= usersPercent)
+            {
+                await _repository.Delete(voteFor);
+                return VoteStatus.Approved;
+            }
+            if (vote.GetVotersStatistic().Unaccept >= usersPercent)
+            {
+                await _repository.Delete(voteFor);
+                return VoteStatus.Unapproved;
+            }
+            await _repository.UpdateVoters(voteFor, userAcceptVote);
+            return VoteStatus.Continue;
         }
 
         public async Task<bool> CreateUserAcceptVote(UserAcceptVote userAcceptVote)

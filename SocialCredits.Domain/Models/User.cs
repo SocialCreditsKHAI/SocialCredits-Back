@@ -38,5 +38,10 @@ namespace SocialCredits.Domain.Models
             Social = social;
             ImagePath = imagePath;
         }
+        
+        public void EditRole()
+        {
+            Role = "user";
+        }
     }
 }

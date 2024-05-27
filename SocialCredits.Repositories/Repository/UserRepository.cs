@@ -1,5 +1,6 @@
 ﻿using MongoDB.Driver;
 using SocialCredits.Domain;
+using SocialCredits.Domain.DTO;
 using SocialCredits.Domain.Models;
 using SocialCredits.Repositories.Interfaces;
 
@@ -14,8 +15,8 @@ namespace SocialCredits.Repositories.Repository
         {
             try
             {
-            await _collection.InsertOneAsync(user);
-            return true;
+                await _collection.InsertOneAsync(user);
+                return true;
             }
             catch (Exception ex)
             {
@@ -38,14 +39,24 @@ namespace SocialCredits.Repositories.Repository
         }
 
         public async Task<List<User>> SearchUserByName(string name)
-        { 
+        {
             var filter = Builders<User>.Filter.Regex("Name", new MongoDB.Bson.BsonRegularExpression(name, "i"));
             return await _collection.Find<User>(filter).ToListAsync();
         }
 
-        public async Task<bool> UpdateUser(User user)
+        public async Task UpdateUserRole(string login, string role)
         {
-            throw new NotImplementedException();
+
+            var filter = Builders<User>.Filter.Eq("Login", login);
+            var update = Builders<User>.Update.Set(f => f.Role, role);
+            var a = await _collection.UpdateOneAsync(filter, update);
+            Console.WriteLine(a.ModifiedCount > 0);
         }
+
+        public async Task<long> GetUsersCount()
+        {
+            return await _collection.CountAsync(Builders<User>.Filter.Eq("Role", "User"));
+        }
+
     }
 }

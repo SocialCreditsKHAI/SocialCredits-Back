@@ -79,7 +79,7 @@ namespace SocialCredits_Back
             app.UseCors("AllowSpecificOrigins");
             app.Use(async (context, next) =>
             {
-                string token = context.Request.Cookies["token"];
+                string token = context.Request.Cookies["token"]!;
                 if (!string.IsNullOrEmpty(token))
                 {
                     context.Request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", token).ToString();

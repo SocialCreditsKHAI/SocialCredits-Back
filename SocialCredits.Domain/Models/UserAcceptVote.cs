@@ -1,5 +1,4 @@
 ﻿using MongoDB.Bson;
-using System.Reflection;
 
 namespace SocialCredits.Domain.Models
 {
